@@ -1,0 +1,20 @@
+{
+  "name": "code-sandbox",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tailwindcss build -o static/css/tailwind.css --minify",
+    "watch": "tailwindcss build -o static/css/tailwind.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.9"
+  },
+  "dependencies": {
+    "htmx.org": "^1.9.12",
+    "monaco-editor": "^0.50.0"
+  }
+}

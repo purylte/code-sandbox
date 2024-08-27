@@ -1,0 +1,36 @@
+package templates
+
+templ CodeSandbox(lang string) {
+	@templ.JSONScript("lang", lang)
+	<div id="container" class="w-full h-[600px] border"></div>
+	<script src="/static/vendored/monaco-editor/min/vs/loader.js"></script>
+	<script>
+		require.config({ paths: { vs: '/static/vendored/monaco-editor/min/vs' } });
+
+		require(['vs/editor/editor.main'], function () {
+			const lang = JSON.parse(document.getElementById('lang').textContent);
+			var editor = monaco.editor.create(document.getElementById('container'), {
+				value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
+				language: lang
+			});
+
+			const loadContent = () => {
+				const savedContent = localStorage.getItem('editor');
+				if (savedContent) {
+					editor.setValue(savedContent);
+				}
+			};
+
+			const saveContent = () => {
+				localStorage.setItem('editor', editor.getValue());
+			};
+
+			editor.getModel().onDidChangeContent(() => {
+				saveContent();
+			});
+
+			loadContent();
+
+			});
+	</script>
+}

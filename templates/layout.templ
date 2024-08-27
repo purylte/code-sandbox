@@ -1,0 +1,34 @@
+package templates
+
+templ header() {
+	<header class="w-full bg-gray-50 dark:bg-gray-900">
+		<nav class="w-full mx-auto flex items-center py-2 px-4">
+			<a class="hover:opacity-90" href="#">
+				<h3 class="font-semibold text-xl text-black dark:text-white font-mono">PLAYGROUND</h3>
+			</a>
+			<a href="go">
+				<h3>Go </h3>
+			</a>
+		</nav>
+	</header>
+}
+
+templ MainLayout(part templ.Component) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<title>Code Playground</title>
+			<meta charset="UTF-8"/>
+			<link rel="stylesheet" href="/static/css/tailwind.css"/>
+			<script src="/static/vendored/htmx.org/dist/htmx.min.js"></script>
+		</head>
+		<body>
+			<main>
+				@header()
+				<section class="content bg-gray-50">
+					@part
+				</section>
+			</main>
+		</body>
+	</html>
+}

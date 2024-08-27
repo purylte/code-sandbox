@@ -1,0 +1,5 @@
+FROM busybox:glibc
+
+COPY ./runner /usr/local/bin/runner
+
+ENTRYPOINT ["/usr/local/bin/runner"]
