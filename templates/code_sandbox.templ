@@ -3,6 +3,25 @@ package templates
 templ CodeSandbox(lang string) {
 	@templ.JSONScript("lang", lang)
 	<div id="container" class="w-full h-[600px] border"></div>
+	<div class="flex items-center align-middle my-2 gap-2">
+		<button
+			id="runButton"
+			class="p-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition ease-in-out duration-150"
+			hx-post="/run"
+			hx-include="#editorContent"
+			hx-vals='js:{"lang": JSON.parse(document.getElementById("lang").textContent)}'
+			hx-target="#output"
+			hx-swap="innerHTML"
+			hx-indicator="#spinner"
+		>
+			Run Code
+		</button>
+		<div id="spinner" class="htmx-indicator h-6 w-6 animate-spin rounded-full border-b-2 border-current"></div>
+	</div>
+	<div id="output">
+		@Output("", "")
+	</div>
+	<textarea id="editorContent" name="code" class="hidden" hidden="hidden"></textarea>
 	<script src="/static/vendored/monaco-editor/min/vs/loader.js"></script>
 	<script>
 		require.config({ paths: { vs: '/static/vendored/monaco-editor/min/vs' } });
@@ -10,19 +29,20 @@ templ CodeSandbox(lang string) {
 		require(['vs/editor/editor.main'], function () {
 			const lang = JSON.parse(document.getElementById('lang').textContent);
 			var editor = monaco.editor.create(document.getElementById('container'), {
-				value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
+				value: "",
 				language: lang
 			});
 
 			const loadContent = () => {
-				const savedContent = localStorage.getItem('editor');
+				const savedContent = localStorage.getItem(lang+'editor');
 				if (savedContent) {
 					editor.setValue(savedContent);
 				}
 			};
 
 			const saveContent = () => {
-				localStorage.setItem('editor', editor.getValue());
+				localStorage.setItem(lang+'editor', editor.getValue());
+				document.getElementById('editorContent').value = editor.getValue();
 			};
 
 			editor.getModel().onDidChangeContent(() => {
@@ -30,6 +50,7 @@ templ CodeSandbox(lang string) {
 			});
 
 			loadContent();
+			saveContent();
 
 			});
 	</script>

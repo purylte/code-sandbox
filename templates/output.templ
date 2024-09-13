@@ -1,0 +1,53 @@
+package templates
+
+templ Output(stdout string, stderr string) {
+	<div id="output-container" class="font-sans">
+		<div class="flex border-b border-gray-200">
+			<button id="stdout-tab" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white rounded-t-lg hover:text-gray-800 focus:outline-none" onclick="setActiveTab('stdout', this)">
+				stdout
+			</button>
+			<button id="stderr-tab" class="px-4 py-2 text-sm font-medium text-gray-600 bg-white rounded-t-lg hover:text-gray-800 focus:outline-none" onclick="setActiveTab('stderr', this)">
+				stderr
+			</button>
+		</div>
+		<div id="stdout-content" class="p-4 bg-white rounded-b-lg">
+			<pre class="text-sm text-gray-800 whitespace-pre-wrap">{ stdout }</pre>
+		</div>
+		<div id="stderr-content" class="p-4 bg-white rounded-b-lg" hidden>
+			<pre class="text-sm text-red-600 whitespace-pre-wrap">{ stderr }</pre>
+		</div>
+		<script>
+            (function() {
+                function setActiveTab(tabName, clickedTab) {
+                    const container = document.getElementById('output-container');
+                    const tabs = container.querySelectorAll('button');
+                    const contents = container.querySelectorAll('div[id$="-content"]');
+                    
+                    tabs.forEach(tab => {
+                        tab.classList.remove('text-black', 'bg-gray-200');
+                        tab.classList.add('text-gray-600', 'bg-white');
+                    });
+                    contents.forEach(content => content.hidden = true);
+                    
+                    clickedTab.classList.remove('text-gray-600', 'bg-white');
+                    clickedTab.classList.add('text-black', 'bg-gray-200');
+                    const activeContent = container.querySelector(`#${tabName}-content`);
+                    activeContent.hidden = false;
+                }
+
+                // Expose setActiveTab to global scope
+                window.setActiveTab = setActiveTab;
+
+                // Set initial active tab
+                setActiveTab('stdout', document.getElementById('stdout-tab'));
+
+                // Handle after swap event
+                document.body.addEventListener('htmx:afterSwap', function(evt) {
+                    if (evt.detail.target.id === "output-container") {
+                        setActiveTab('stdout', document.getElementById('stdout-tab'));
+                    }
+                });
+            })();
+        </script>
+	</div>
+}
