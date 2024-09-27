@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tailwindcss build -o static/css/tailwind.css --minify",
-    "watch": "tailwindcss build -o static/css/tailwind.css --watch"
+    "watch": "tailwindcss build -o static/css/tailwind.css --watch",
+    "init-vendor": "rm -rf static/vendor && mkdir -p static/vendor/htmx.org static/vendor/monaco-editor && pnpm install && cp -R node_modules/htmx.org/* static/vendor/htmx.org/ && cp -R node_modules/monaco-editor/* static/vendor/monaco-editor/"
   },
   "keywords": [],
   "author": "",

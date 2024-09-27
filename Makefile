@@ -11,3 +11,6 @@ build: tmp/main
 
 watch-css:
 	npx tailwindcss build -o ./static/css/tailwind.css --watch
+
+init-vendor:
+	pnpm init-vendor
